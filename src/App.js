@@ -6,15 +6,17 @@ import './App.css';
 function App() {
   const [users, setUsers] = useState([]);
   const [teamsUser, setTeamsUser] = useState(null);
+  const [authToken, setAuthToken] = useState(null);
+  const [authError, setAuthError] = useState(null);
 
-  // Fetch fake users
+  // Fetch fake users (you can replace this with your actual API call)
   useEffect(() => {
     axios.get('https://jsonplaceholder.typicode.com/users')
       .then(res => setUsers(res.data))
       .catch(err => console.error("Failed to fetch users", err));
   }, []);
 
-  // Initialize Microsoft Teams and get user context
+  // Initialize Teams SDK, get context, and then get auth token
   useEffect(() => {
     microsoftTeams.app.initialize()
       .then(() => {
@@ -24,6 +26,24 @@ function App() {
       .then(context => {
         console.log("🙍 User info:", context.user);
         setTeamsUser(context.user);
+
+        // Get auth token for API calls
+        microsoftTeams.authentication.getAuthToken({
+          successCallback: (token) => {
+            console.log("🔑 Auth token acquired:", token);
+            setAuthToken(token);
+            setAuthError(null);
+
+            // Example: Use the token to call your own backend or Microsoft Graph
+            // axios.get('/your-protected-api', { headers: { Authorization: `Bearer ${token}` } })
+            //   .then(...)
+            //   .catch(...);
+          },
+          failureCallback: (error) => {
+            console.error("❌ Failed to get auth token", error);
+            setAuthError(error);
+          }
+        });
       })
       .catch(err => {
         console.error("❌ Teams initialization failed", err);
@@ -53,6 +73,22 @@ function App() {
         </div>
       ) : (
         <p>Loading Teams context...</p>
+      )}
+
+      <hr />
+
+      <h2>🔑 Authentication Token</h2>
+      {authToken ? (
+        <textarea
+          readOnly
+          rows={5}
+          style={{ width: '100%' }}
+          value={authToken}
+        />
+      ) : authError ? (
+        <p style={{ color: 'red' }}>Error acquiring token: {authError}</p>
+      ) : (
+        <p>Loading auth token...</p>
       )}
     </div>
   );
