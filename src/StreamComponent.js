@@ -61,11 +61,15 @@ const StreamComponent = () => {
     <div className="chat-container">
       <div className="chat-box" ref={chatBoxRef}>
         {messages.map((msg, idx) => (
-          <div key={idx} className={`bubble ${msg.role}`}>
-            {msg.content}
+          <div key={idx} className={`bubble-wrapper ${msg.role}`}>
+            <div className={`bubble ${msg.role}`}>{msg.content}</div>
           </div>
         ))}
-        {isLoading && <div className="bubble assistant">Typing...</div>}
+        {isLoading && (
+          <div className="bubble-wrapper assistant">
+            <div className="bubble assistant">Typing...</div>
+          </div>
+        )}
       </div>
 
       <div className="chat-input">
