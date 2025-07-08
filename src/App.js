@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import * as microsoftTeams from "@microsoft/teams-js";
 import StreamComponent from "./StreamComponent";
-<<<<<<< HEAD
 import Login from "./Login";
-=======
 import Signup from "./Signup";
->>>>>>> 6dff4a3 (add Signup Page)
 import "./App.css";
 
 function App() {
