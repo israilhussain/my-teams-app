@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as microsoftTeams from "@microsoft/teams-js";
 import StreamComponent from "./StreamComponent";
+import Login from "./Login";
 import "./App.css";
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
 
   return (
     <div className="App">
+      <Login />
       <StreamComponent />
     </div>
   );
